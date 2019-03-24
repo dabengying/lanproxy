@@ -24,13 +24,13 @@ public class SslContextCreator {
 
     private static Logger logger = LoggerFactory.getLogger(SslContextCreator.class);
 
-    public static SSLContext createSSLContext() {
-        return new SslContextCreator().initSSLContext();
+    public static SSLContext createSSLContext(Config config) {
+        return new SslContextCreator().initSSLContext(config);
     }
 
-    public SSLContext initSSLContext() {
+    public SSLContext initSSLContext(Config config) {
         logger.info("Checking SSL configuration properties...");
-        final String jksPath = Config.getInstance().getStringValue("ssl.jksPath");
+        final String jksPath =config.getStringValue("ssl.jksPath");
         logger.info("Initializing SSL context. KeystorePath = {}.", jksPath);
         if (jksPath == null || jksPath.isEmpty()) {
             // key_store_password or key_manager_password are empty
@@ -41,7 +41,7 @@ public class SslContextCreator {
         // if we have the port also the jks then keyStorePassword and
         // keyManagerPassword
         // has to be defined
-        final String keyStorePassword = Config.getInstance().getStringValue("ssl.keyStorePassword");
+        final String keyStorePassword = config.getStringValue("ssl.keyStorePassword");
         // if client authentification is enabled a trustmanager needs to be
         // added to the ServerContext
 

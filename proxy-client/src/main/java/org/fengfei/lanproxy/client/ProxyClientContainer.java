@@ -49,13 +49,16 @@ public class ProxyClientContainer implements Container, ChannelStatusListener {
 
     private Bootstrap realServerBootstrap;
 
-    private Config config = Config.getInstance();
+    private Config config = null;// Config.getInstance();
 
     private SSLContext sslContext;
 
     private long sleepTimeMill = 1000;
 
-    public ProxyClientContainer() {
+    public ProxyClientContainer(Config config) {
+        this.config=config;
+        ClientChannelMannager.setConfig(config);
+
         workerGroup = new NioEventLoopGroup();
         realServerBootstrap = new Bootstrap();
         realServerBootstrap.group(workerGroup);
@@ -75,9 +78,9 @@ public class ProxyClientContainer implements Container, ChannelStatusListener {
 
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
-                if (Config.getInstance().getBooleanValue("ssl.enable", false)) {
+                if (config.getBooleanValue("ssl.enable", false)) {
                     if (sslContext == null) {
-                        sslContext = SslContextCreator.createSSLContext();
+                        sslContext = SslContextCreator.createSSLContext(config);
                     }
 
                     ch.pipeline().addLast(createSslHandler(sslContext));
@@ -85,7 +88,7 @@ public class ProxyClientContainer implements Container, ChannelStatusListener {
                 ch.pipeline().addLast(new ProxyMessageDecoder(MAX_FRAME_LENGTH, LENGTH_FIELD_OFFSET, LENGTH_FIELD_LENGTH, LENGTH_ADJUSTMENT, INITIAL_BYTES_TO_STRIP));
                 ch.pipeline().addLast(new ProxyMessageEncoder());
                 ch.pipeline().addLast(new IdleCheckHandler(IdleCheckHandler.READ_IDLE_TIME, IdleCheckHandler.WRITE_IDLE_TIME - 10, 0));
-                ch.pipeline().addLast(new ClientChannelHandler(realServerBootstrap, bootstrap, ProxyClientContainer.this));
+                ch.pipeline().addLast(new ClientChannelHandler(realServerBootstrap, bootstrap, ProxyClientContainer.this,config));
             }
         });
     }
@@ -155,7 +158,7 @@ public class ProxyClientContainer implements Container, ChannelStatusListener {
 
     public static void main(String[] args) {
 
-        ContainerHelper.start(Arrays.asList(new Container[] { new ProxyClientContainer() }));
+//        ContainerHelper.start(Arrays.asList(new Container[] { new ProxyClientContainer() }));
     }
 
 }

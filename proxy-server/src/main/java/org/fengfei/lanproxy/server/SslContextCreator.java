@@ -18,7 +18,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import org.fengfei.lanproxy.common.Config;
+import org.fengfei.lanproxy.server.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

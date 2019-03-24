@@ -19,6 +19,14 @@ public class ContainerHelper {
 
     private static List<Container> cachedContainers;
 
+
+    public static void stopProxy(){
+        // 停止所有容器.
+        stopContainers();
+        running = false;
+        ContainerHelper.class.notify();
+    }
+
     public static void start(List<Container> containers) {
 
         cachedContainers = containers;
@@ -33,10 +41,7 @@ public class ContainerHelper {
 
                 synchronized (ContainerHelper.class) {
 
-                    // 停止所有容器.
-                    stopContainers();
-                    running = false;
-                    ContainerHelper.class.notify();
+                    stopProxy();
                 }
             }
         });

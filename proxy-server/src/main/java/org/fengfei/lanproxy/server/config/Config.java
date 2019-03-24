@@ -1,4 +1,6 @@
-package org.fengfei.lanproxy.common;
+package org.fengfei.lanproxy.server.config;
+
+import org.fengfei.lanproxy.common.LangUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,60 +18,54 @@ public class Config {
 
     private static Map<String, Config> instances = new ConcurrentHashMap<String, Config>();
 
-    private   Properties configuration = new Properties();
+    private Properties configuration = new Properties();
 
-
-    public Config(Properties properties){
-        configuration=properties;
-
+    private Config() {
+        initConfig(DEFAULT_CONF);
     }
 
-//    private Config() {
-//        initConfig(DEFAULT_CONF);
-//    }
-//
-//    private Config(String configFile) {
-//        initConfig(configFile);
-//    }
-//
-//    private void initConfig(String configFile) {
-//        InputStream is = Config.class.getClassLoader().getResourceAsStream(configFile);
-//        try {
-//            configuration.load(is);
-//            is.close();
-//        } catch (IOException ex) {
-//            throw new RuntimeException(ex);
-//        }
-//    }
-//
-//    /**
-//     * 获得Configuration实例。 默认为config.property
-//     *
-//     * @return Configuration实例
-//     */
-//    public static Config getInstance() {
-//        return defaultConfig;
-//    }
+    private Config(String configFile) {
+        initConfig(configFile);
+    }
+
+    private void initConfig(String configFile) {
+        InputStream is = Config.class.getClassLoader().getResourceAsStream(configFile);
+        try {
+            configuration.load(is);
+            is.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * 获得Configuration实例。 默认为config.property
+     *
+     * @return Configuration实例
+     */
+    public static Config getInstance() {
+        return getInstance(DEFAULT_CONF);
+    }
 
     /**
      * 自定义文件解析**.property
      *
      * @param configFile
      * @return
-//     */
-//    public static Config getInstance(String configFile) {
-//        Config config = instances.get(configFile);
-//        if (config == null) {
-//            synchronized (instances) {
-//                config = instances.get(configFile);
-//                if (config == null) {
-//                    config = new Config(configFile);
-//                    instances.put(configFile, config);
-//                }
-//            }
-//        }
-//        return config;
-//    }
+     */
+    public static Config getInstance(String configFile) {
+        Config config = instances.get(configFile);
+        if (config == null) {
+            synchronized (instances) {
+                config = instances.get(configFile);
+                if (config == null) {
+                    config = new Config(configFile);
+                    instances.put(configFile, config);
+                }
+            }
+        }
+        return config;
+    }
 
     /**
      * 获得配置项。

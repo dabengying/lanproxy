@@ -29,6 +29,9 @@ import io.netty.handler.stream.ChunkedNioFile;
 
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
+    //本地开发
+//    private static final String PAGE_FOLDER = "/Users/zhouzhipeng/IdeaProjects/lanproxy/proxy-server/webpages";
+
     private static final String PAGE_FOLDER = System.getProperty("app.home", System.getProperty("user.dir"))
             + "/webpages";
 

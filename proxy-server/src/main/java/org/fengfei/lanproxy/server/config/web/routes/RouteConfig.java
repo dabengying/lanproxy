@@ -61,10 +61,17 @@ public class RouteConfig {
 
                 String auth = request.headers().get(HttpHeaders.Names.AUTHORIZATION);
                 if (!authenticated && auth != null) {
-                    String[] authArr = auth.split(" ");
+                    String[] authArr    = auth.split(" ");
                     if (authArr.length == 2 && authArr[0].equals(ProxyConfig.getInstance().getConfigAdminUsername()) && authArr[1].equals(ProxyConfig.getInstance().getConfigAdminPassword())) {
                         authenticated = true;
                     }
+                }
+
+
+                //支持token请求头模式验证
+                String upToken = request.headers().get("token");
+                if(upToken!=null && upToken.equals(token)){
+                    authenticated = true;
                 }
 
                 if (!request.getUri().equals("/login") && !authenticated) {

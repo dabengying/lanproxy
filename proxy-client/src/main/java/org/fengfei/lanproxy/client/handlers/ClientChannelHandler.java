@@ -34,10 +34,14 @@ public class ClientChannelHandler extends SimpleChannelInboundHandler<ProxyMessa
 
     private ChannelStatusListener channelStatusListener;
 
-    public ClientChannelHandler(Bootstrap bootstrap, Bootstrap proxyBootstrap, ChannelStatusListener channelStatusListener) {
+    private Config config;
+
+    public ClientChannelHandler(Bootstrap bootstrap, Bootstrap proxyBootstrap, ChannelStatusListener channelStatusListener, Config config) {
         this.bootstrap = bootstrap;
         this.proxyBootstrap = proxyBootstrap;
         this.channelStatusListener = channelStatusListener;
+
+        this.config=config;
     }
 
     @Override
@@ -108,7 +112,7 @@ public class ClientChannelHandler extends SimpleChannelInboundHandler<ProxyMessa
                             // 远程绑定
                             ProxyMessage proxyMessage = new ProxyMessage();
                             proxyMessage.setType(ProxyMessage.TYPE_CONNECT);
-                            proxyMessage.setUri(userId + "@" + Config.getInstance().getStringValue("client.key"));
+                            proxyMessage.setUri(userId + "@" + config.getStringValue("client.key"));
                             channel.writeAndFlush(proxyMessage);
 
                             realServerChannel.config().setOption(ChannelOption.AUTO_READ, true);

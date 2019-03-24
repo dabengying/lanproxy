@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.fengfei.lanproxy.common.Config;
+import org.fengfei.lanproxy.server.config.Config;
 import org.fengfei.lanproxy.common.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

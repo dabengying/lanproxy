@@ -7,7 +7,7 @@ import java.util.List;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 
-import org.fengfei.lanproxy.common.Config;
+import org.fengfei.lanproxy.server.config.Config;
 import org.fengfei.lanproxy.common.container.Container;
 import org.fengfei.lanproxy.common.container.ContainerHelper;
 import org.fengfei.lanproxy.protocol.IdleCheckHandler;

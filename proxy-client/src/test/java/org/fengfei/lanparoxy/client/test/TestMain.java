@@ -9,7 +9,7 @@ import org.fengfei.lanproxy.common.container.ContainerHelper;
 public class TestMain {
 
     public static void main(String[] args) {
-        ContainerHelper.start(Arrays.asList(new Container[] { new ProxyClientContainer() }));
+//        ContainerHelper.start(Arrays.asList(new Container[] { new ProxyClientContainer() }));
     }
 
 }

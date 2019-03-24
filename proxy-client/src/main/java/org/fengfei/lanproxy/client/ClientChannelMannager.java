@@ -42,7 +42,11 @@ public class ClientChannelMannager {
 
     private static volatile Channel cmdChannel;
 
-    private static Config config = Config.getInstance();
+    private static Config config = null;
+
+    public static void setConfig(Config cfg){
+        config=cfg;
+    }
 
     public static void borrowProxyChanel(Bootstrap bootstrap, final ProxyChannelBorrowListener borrowListener) {
         Channel channel = proxyChannelPool.poll();

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>-->
+
+</head>
+<body>
+<h3>让你的本地网页等服务,一键外网可见!</h3>
+
+<p id="serverInfo">服务状态：待连接</p>
+
+<input type="button" onclick="jb.startServer()" value="开启服务"/>
+
+<input type="button" onclick="jb.stopServer()" value="停止服务"/>
+
+<hr/>
+
+<h3>临时暴露页面到公网</h3>
+<input id="localUrl" type="text" placeholder="粘贴你本地的页面url"> <br>
+
+<input type="button" onclick="jb.exposePort()" value="暴露"/> <br>
+<input type="button" onclick="jb.test()" value="test"/> <br>
+
+<p id="openUrl">公网地址： </p>
+
+<img id="qrCode"/>
+
+</body>
+</html>
