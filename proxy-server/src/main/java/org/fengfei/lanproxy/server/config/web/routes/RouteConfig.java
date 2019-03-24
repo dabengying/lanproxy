@@ -1,9 +1,7 @@
 package org.fengfei.lanproxy.server.config.web.routes;
 
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import org.fengfei.lanproxy.common.JsonUtil;
 import org.fengfei.lanproxy.server.ProxyChannelManager;
@@ -37,7 +35,9 @@ public class RouteConfig {
     private static Logger logger = LoggerFactory.getLogger(RouteConfig.class);
 
     /** 管理员不能同时在多个地方登录 */
-    private static String token;
+//    private static String token;
+
+    private static Queue<String> tokenQueue=new ArrayDeque<>(10);
 
     public static void init() {
 
@@ -52,7 +52,7 @@ public class RouteConfig {
                     for (String cookie : cookies) {
                         String[] cookieArr = cookie.split("=");
                         if (AUTH_COOKIE_KEY.equals(cookieArr[0].trim())) {
-                            if (cookieArr.length == 2 && cookieArr[1].equals(token)) {
+                            if (cookieArr.length == 2 && tokenQueue.contains(cookieArr[1])) {
                                 authenticated = true;
                             }
                         }
@@ -70,7 +70,7 @@ public class RouteConfig {
 
                 //支持token请求头模式验证
                 String upToken = request.headers().get("token");
-                if(upToken!=null && upToken.equals(token)){
+                if(upToken!=null && tokenQueue.contains( upToken)){
                     authenticated = true;
                 }
 
@@ -145,7 +145,14 @@ public class RouteConfig {
                 }
 
                 if (username.equals(ProxyConfig.getInstance().getConfigAdminUsername()) && password.equals(ProxyConfig.getInstance().getConfigAdminPassword())) {
-                    token = UUID.randomUUID().toString().replace("-", "");
+                    String token = UUID.randomUUID().toString().replace("-", "");
+
+                    tokenQueue.add(token);
+                    if(tokenQueue.size()>100){
+                        tokenQueue.poll();
+                    }
+
+
                     return ResponseInfo.build(token);
                 }
 
@@ -157,7 +164,7 @@ public class RouteConfig {
 
             @Override
             public ResponseInfo request(FullHttpRequest request) {
-                token = null;
+//                token = null;
                 return ResponseInfo.build(ResponseInfo.CODE_OK, "success");
             }
         });
